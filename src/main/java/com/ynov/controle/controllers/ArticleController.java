@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -214,6 +215,24 @@ public class ArticleController {
         result.setQuantity(newQuantity);
         return new ResponseEntity<>(
                 userServices.createUser(user),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("reports/inventory")
+    public ResponseEntity<?> showInventory(String token){
+        Optional<User> entity = userServices.getUserByEmail(jwtService.extractUsername(token));
+        if(entity.isEmpty())
+            return new ResponseEntity(
+                    "User does not exist",
+                    HttpStatus.NOT_FOUND
+            );
+        Map<String, Integer> inventory = new HashMap<>();
+        for(Article article : entity.get().getStock()){
+            inventory.put(article.getName(), article.getQuantity());
+        }
+        return new ResponseEntity<>(
+                inventory,
                 HttpStatus.OK
         );
     }
