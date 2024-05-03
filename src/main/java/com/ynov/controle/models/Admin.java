@@ -3,8 +3,10 @@ package com.ynov.controle.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,12 +17,13 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Admin implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Min(8)
+    @Min(value = 8, message = "Password should be at least 8 characters long")
     private String password;
     @Column(unique = true)
     @Email(message = "Not a valid email address")
