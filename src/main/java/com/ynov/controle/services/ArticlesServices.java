@@ -8,4 +8,6 @@ public interface ArticlesServices {
     Object getAllArticles();
 
     Optional<Article> getArticleById(Long id);
+
+    void deleteArticleById(Long id);
 }

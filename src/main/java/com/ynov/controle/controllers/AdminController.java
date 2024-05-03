@@ -21,7 +21,6 @@ import static com.ynov.controle.models.Role.RoleEnum.USER;
 
 @RestController
 @RequestMapping("admin")
-@PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
     @Autowired
     UserServices userServices;

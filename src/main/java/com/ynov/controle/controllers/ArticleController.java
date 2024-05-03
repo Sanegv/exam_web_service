@@ -78,6 +78,65 @@ public class ArticleController {
         User response = userServices.createUser(user);
         return new ResponseEntity<>(
                 response,
+                HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("products/{id}")
+    public ResponseEntity<?> changeArticle(String token, @PathVariable Long id){
+        Optional<User> entity = userServices.getUserByEmail(jwtService.extractUsername(token));
+        if(entity.isEmpty())
+            return new ResponseEntity(
+                    "User does not exist",
+                    HttpStatus.NOT_FOUND
+            );
+        User user = entity.get();
+        Article result = null;
+        for(Article article : user.getStock()){
+            if(article.getId() == id) {
+                result = article;
+                break;
+            }
+        }
+        if(result == null){
+            return new ResponseEntity<>(
+                    "No product with provided id",
+                    HttpStatus.NOT_FOUND
+            );
+        }
+        user.getStock().add(result);
+        User response = userServices.createUser(user);
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.CREATED
+        );
+    }
+
+    @DeleteMapping("products/{id}")
+    public ResponseEntity<?> deleteArticle(String token, @PathVariable Long id){
+        Optional<User> entity = userServices.getUserByEmail(jwtService.extractUsername(token));
+        if(entity.isEmpty())
+            return new ResponseEntity(
+                    "User does not exist",
+                    HttpStatus.NOT_FOUND
+            );
+        User user = entity.get();
+        Article result = null;
+        for(Article article : user.getStock()){
+            if(article.getId() == id) {
+                result = article;
+                break;
+            }
+        }
+        if(result == null){
+            return new ResponseEntity<>(
+                    "No product with provided id",
+                    HttpStatus.NOT_FOUND
+            );
+        }
+        user.getStock().remove(result);
+        articlesServices.deleteArticleById(id);
+        return new ResponseEntity<>(
                 HttpStatus.OK
         );
     }

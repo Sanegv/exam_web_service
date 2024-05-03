@@ -28,10 +28,18 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests( registry -> {
                     registry
-                            .requestMatchers("/auth/**")
+                            .requestMatchers("users/login")
                             .permitAll()
+                            .requestMatchers("/users/**")
+                            .hasRole(Role.RoleEnum.USER.name())
+                            .requestMatchers("/api/**")
+                            .hasRole(Role.RoleEnum.USER.name())
+                            .requestMatchers("/admin/login")
+                            .permitAll()
+                            .requestMatchers("/admin/**")
+                            .hasRole(Role.RoleEnum.ADMIN.name())
                             .anyRequest()
-                            .authenticated();
+                            .permitAll();
                 })
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
