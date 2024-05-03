@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: Quentin-Lemaire
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/examen}
+    username: root
+    password: bob
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+
+  output:
+    ansi:
+      enabled: ALWAYS
+server:
+  port: 8090
